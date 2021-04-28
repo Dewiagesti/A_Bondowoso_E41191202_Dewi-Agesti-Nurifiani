@@ -13,6 +13,36 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth'])->name('dashboard');
+
+Route::middleware(['auth'])->group(function () {
+    // Route::prefix('admin')->group(function () {
+
+    // });
+    Route::get('/', function () {
+        return view('dashboard');
+    });
+    Route::get('dashboard', function() {
+        return view('dashboard');
+    });
 });
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('backend')->group(function () {
+        Route::resource('pendidikan', 'Backend\PendidikanController', ['names' => [
+            'index' => 'pendidikan'
+        ]]);
+        // Route::resource('pendidikan', 'PendidikanController');
+        Route::resource('pengalaman', 'Backend\PengalamanKerjaController', ['names' => [
+            'index' => 'pengalaman'
+        ]]);
+
+    });
+
+});
+require __DIR__.'/auth.php';
